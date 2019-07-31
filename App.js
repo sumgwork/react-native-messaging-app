@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import MessageList from "./components/MessageList";
 import Status from "./components/Status";
+import Toolbar from "./components/Toolbar";
 import {
   createImageMessage,
   createLocationMessage,
@@ -88,7 +89,7 @@ export default function App() {
   const renderToolbar = () => {
     return (
       <View style={styles.toolbar}>
-        <Text>Toolbar</Text>
+        <Toolbar isFocused={false} />
       </View>
     );
   };
