@@ -14,8 +14,6 @@ import { MessageShape } from "../utils/MessageUtils";
 const keyExtractor = item => item.id;
 
 const MessageList = ({ onPressMessage, messages }) => {
-  console.log("messages", messages);
-
   const renderMessageBody = ({ type, text, uri, coordinates }) => {
     switch (type) {
       case "text":
@@ -46,7 +44,7 @@ const MessageList = ({ onPressMessage, messages }) => {
 
   const renderMessageItem = ({ item }) => (
     <View key={item.id} style={styles.messageRow}>
-      <TouchableOpacity onPress={item => onPressMessage(item)}>
+      <TouchableOpacity onPress={() => onPressMessage(item)}>
         {renderMessageBody(item)}
       </TouchableOpacity>
     </View>
