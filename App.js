@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  Image,
+  TouchableHighlight,
+  BackHandler
+} from "react-native";
 import MessageList from "./components/MessageList";
 import Status from "./components/Status";
 import {
@@ -18,6 +26,27 @@ export default function App() {
     }),
     createTextMessage("Hello")
   ]);
+
+  const [fullScreenImageId, setFullScreenImageId] = useState(null);
+
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        if (fullScreenImageId) {
+          setFullScreenImageId(null);
+          return true;
+        }
+        return false;
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const dismissFullScreenImage = () => setFullScreenImageId(null);
 
   handlePressMessage = ({ type, id }) => {
     switch (type) {
@@ -39,6 +68,9 @@ export default function App() {
             }
           ]
         );
+        break;
+      case "image":
+        setFullScreenImageId(id);
         break;
       default:
         break;
@@ -69,12 +101,30 @@ export default function App() {
     );
   };
 
+  const renderFullScreenImage = () => {
+    if (!fullScreenImageId) return null;
+
+    const image = messages.find(message => message.id === fullScreenImageId);
+    if (!image) return null;
+    const { uri } = image;
+
+    return (
+      <TouchableHighlight
+        style={styles.fullScreenOverlay}
+        onPress={dismissFullScreenImage}
+      >
+        <Image style={styles.fullScreenImage} source={{ uri }} />
+      </TouchableHighlight>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Status />
       {renderMessageList()}
       {renderToolbar()}
       {renderInputMethodEditor()}
+      {renderFullScreenImage()}
     </View>
   );
 }
@@ -96,5 +146,14 @@ const styles = StyleSheet.create({
   inputMethodEditor: {
     flex: 1,
     backgroundColor: "white"
+  },
+  fullScreenOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "black",
+    zIndex: 2
+  },
+  fullScreenImage: {
+    flex: 1,
+    resizeMode: "contain"
   }
 });

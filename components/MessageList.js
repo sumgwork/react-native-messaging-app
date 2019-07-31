@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
-import { MapView } from "expo";
+import MapView from "react-native-maps";
 import PropTypes from "prop-types";
 import { MessageShape } from "../utils/MessageUtils";
 
