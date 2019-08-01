@@ -30,6 +30,8 @@ export default function App() {
 
   const [fullScreenImageId, setFullScreenImageId] = useState(null);
 
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
   useEffect(() => {
     const subscription = BackHandler.addEventListener(
       "hardwareBackPress",
@@ -47,9 +49,19 @@ export default function App() {
     };
   }, []);
 
+  const handlePressToolbarCamera = () => {};
+
+  const handlePressToolbarLocation = () => {};
+
+  const handleChangeFocus = isFocused => setIsInputFocused(isFocused);
+
   const dismissFullScreenImage = () => setFullScreenImageId(null);
 
-  handlePressMessage = ({ type, id }) => {
+  const handleSubmit = text => {
+    setMessages([createTextMessage(text), ...messages]);
+  };
+
+  const handlePressMessage = ({ type, id }) => {
     switch (type) {
       case "text":
         Alert.alert(
@@ -72,6 +84,7 @@ export default function App() {
         break;
       case "image":
         setFullScreenImageId(id);
+        setIsInputFocused(false);
         break;
       default:
         break;
@@ -89,7 +102,13 @@ export default function App() {
   const renderToolbar = () => {
     return (
       <View style={styles.toolbar}>
-        <Toolbar isFocused={false} />
+        <Toolbar
+          isFocused={isInputFocused}
+          onSubmit={handleSubmit}
+          onChangeFocus={handleChangeFocus}
+          onPressCamera={handlePressToolbarCamera}
+          onPressLocation={handlePressToolbarLocation}
+        />
       </View>
     );
   };
