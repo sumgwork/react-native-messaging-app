@@ -51,7 +51,16 @@ export default function App() {
 
   const handlePressToolbarCamera = () => {};
 
-  const handlePressToolbarLocation = () => {};
+  const handlePressToolbarLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => {
+        setMessages([
+          createLocationMessage({ latitude, longitude }),
+          ...messages
+        ]);
+      }
+    );
+  };
 
   const handleChangeFocus = isFocused => setIsInputFocused(isFocused);
 
