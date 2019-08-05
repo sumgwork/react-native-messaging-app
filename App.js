@@ -16,6 +16,7 @@ import {
   createLocationMessage,
   createTextMessage
 } from "./utils/MessageUtils";
+import ImageGrid from "./components/ImageGrid";
 
 export default function App() {
   const [messages, setMessages] = useState([
@@ -125,7 +126,7 @@ export default function App() {
   const renderInputMethodEditor = () => {
     return (
       <View style={styles.inputMethodEditor}>
-        <Text>Editor</Text>
+        <ImageGrid />
       </View>
     );
   };
